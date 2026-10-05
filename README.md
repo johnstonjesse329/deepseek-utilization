@@ -85,7 +85,7 @@ markup actually changed, so your scroll position survives a poll.
 | `peakRateClock.usage.pauseWhenUnfocused` | `true` | Stop polling while no VS Code window is focused |
 | `peakRateClock.usage.showBalanceInStatusBar` | `true` | Show the balance in the bar text |
 | `peakRateClock.usage.balanceCurrency` | `""` | Currency for the bar when several are reported |
-| `peakRateClock.usage.baseUrl` | `https://api.deepseek.com` | API origin |
+| `peakRateClock.usage.baseUrl` | `https://api.deepseek.com` | API origin (application-scoped: see below) |
 
 ## DeepSeek usage tracking
 
@@ -150,6 +150,13 @@ the rate to lag the last reading rather than the current instant.
 
 The API key lives in VS Code Secret Storage, never in `settings.json`, and is only
 sent to the DeepSeek API origin you configure.
+
+`peakRateClock.usage.baseUrl` is deliberately **application-scoped**, so only your
+user settings can set it. An ordinary setting could otherwise be overridden by a
+`.vscode/settings.json` in any repository you open, which would hand the key your
+extension already holds to whichever host that file named. User scope keeps that
+decision yours. (VS Code stores secrets per extension id, so renaming the extension
+means entering the key again.)
 
 ## Chinese holiday data
 
