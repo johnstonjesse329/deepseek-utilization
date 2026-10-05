@@ -22,7 +22,7 @@ export class ClockStatusBar implements vscode.Disposable {
       this.alignment === 'left' ? vscode.StatusBarAlignment.Left : vscode.StatusBarAlignment.Right,
       1000,
     );
-    item.name = 'Peak Rate Clock';
+    item.name = 'DeepSeek Utilization';
     item.command = 'peakRateClock.showSchedule';
     return item;
   }

@@ -77,7 +77,7 @@ export function renderUsageHtml(data: UsagePanelData, now: number): string {
 
   if (!data.configured) {
     body.push(
-      '<div class="callout warn"><strong>No API key configured.</strong><br>Run <code>Peak Rate Clock: Set DeepSeek API Key</code> from the Command Palette. The key is kept in VS Code Secret Storage and is only sent to DeepSeek.</div>',
+      '<div class="callout warn"><strong>No API key configured.</strong><br>Run <code>DeepSeek Utilization: Set DeepSeek API Key</code> from the Command Palette. The key is kept in VS Code Secret Storage and is only sent to DeepSeek.</div>',
     );
   } else if (data.error) {
     body.push(`<div class="callout warn"><strong>Last poll failed.</strong><br>${esc(data.error)}</div>`);

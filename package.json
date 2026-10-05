@@ -1,10 +1,14 @@
 {
-  "name": "peak-rate-clock",
-  "displayName": "Peak Rate Clock",
+  "name": "deepseek-utilization",
+  "displayName": "DeepSeek Utilization",
   "description": "See at a glance whether DeepSeek API pricing is peak or off-peak right now, with a DeepSeek balance/usage tracker.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "local",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnstonjesse329/deepseek-utilization.git"
+  },
   "type": "commonjs",
   "engines": {
     "vscode": "^1.140.0"
@@ -14,6 +18,7 @@
   ],
   "keywords": [
     "deepseek",
+    "utilization",
     "pricing",
     "off-peak",
     "status bar",
@@ -28,31 +33,31 @@
       {
         "command": "peakRateClock.showSchedule",
         "title": "Show Rate Schedule",
-        "category": "Peak Rate Clock"
+        "category": "DeepSeek Utilization"
       },
       {
         "command": "peakRateClock.showUsage",
         "title": "Show DeepSeek Usage",
-        "category": "Peak Rate Clock"
+        "category": "DeepSeek Utilization"
       },
       {
         "command": "peakRateClock.refreshUsage",
         "title": "Refresh DeepSeek Balance",
-        "category": "Peak Rate Clock"
+        "category": "DeepSeek Utilization"
       },
       {
         "command": "peakRateClock.setApiKey",
         "title": "Set DeepSeek API Key",
-        "category": "Peak Rate Clock"
+        "category": "DeepSeek Utilization"
       },
       {
         "command": "peakRateClock.clearApiKey",
         "title": "Clear DeepSeek API Key",
-        "category": "Peak Rate Clock"
+        "category": "DeepSeek Utilization"
       }
     ],
     "configuration": {
-      "title": "Peak Rate Clock",
+      "title": "DeepSeek Utilization",
       "properties": {
         "peakRateClock.timeZone": {
           "type": "string",

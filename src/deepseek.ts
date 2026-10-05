@@ -29,7 +29,13 @@ export class DeepSeekError extends Error {
 /**
  * `GET /user/balance` - the only documented DeepSeek account endpoint. It reports
  * the remaining credit, so ongoing usage is inferred from balance deltas
- * (see `usage.ts`).
+ * (see `usage.ts`). No endpoint reports consumption: the documented API surface is
+ * generation, model listing, files, and this one.
+ * https://api-docs.deepseek.com/api/get-user-balance
+ *
+ * The fields below mirror the published schema exactly - `is_available`, then
+ * `balance_infos[]` carrying `currency` (`CNY` or `USD`), `total_balance`,
+ * `granted_balance` and `topped_up_balance`, with the amounts as strings.
  */
 export async function fetchBalance(
   baseUrl: string,
@@ -95,7 +101,7 @@ function getJson(url: URL, headers: Record<string, string>, timeoutMs: number): 
       url,
       {
         method: 'GET',
-        headers: { 'User-Agent': 'peak-rate-clock', ...headers },
+        headers: { 'User-Agent': 'deepseek-utilization', ...headers },
         timeout: timeoutMs,
       },
       (response) => {
@@ -130,7 +136,7 @@ function getJson(url: URL, headers: Record<string, string>, timeoutMs: number): 
 function describeHttpError(status: number, body: string): string {
   const hint =
     status === 401 || status === 403
-      ? ' The API key was rejected - run "Peak Rate Clock: Set DeepSeek API Key" again.'
+      ? ' The API key was rejected - run "DeepSeek Utilization: Set DeepSeek API Key" again.'
       : '';
   const detail = body.trim() ? ` ${body.trim().slice(0, MAX_BODY_CHARS)}` : '';
   return `DeepSeek returned HTTP ${status}.${hint}${detail}`;

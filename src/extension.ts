@@ -34,7 +34,7 @@ interface Settings {
 }
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
-  const log = vscode.window.createOutputChannel('Peak Rate Clock');
+  const log = vscode.window.createOutputChannel('DeepSeek Utilization');
   const statusBar = new ClockStatusBar(readSettings().alignment);
   const usage = new UsageTracker(context, log);
   const usagePanel = new UsagePanel();
@@ -155,7 +155,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand('peakRateClock.refreshUsage', async () => {
       if (apiKey === undefined) {
         const choice = await vscode.window.showWarningMessage(
-          'Peak Rate Clock: set a DeepSeek API key before polling your balance.',
+          'DeepSeek Utilization: set a DeepSeek API key before polling your balance.',
           'Set API Key',
         );
         if (choice === 'Set API Key') {
@@ -194,7 +194,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       apiKey = undefined;
       applyUsageSettings();
       tick();
-      void vscode.window.showInformationMessage('Peak Rate Clock: DeepSeek API key cleared.');
+      void vscode.window.showInformationMessage('DeepSeek Utilization: DeepSeek API key cleared.');
     }),
   );
 

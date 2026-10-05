@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0
+
+- Renamed to **DeepSeek Utilization**. The extension id is now
+  `local.deepseek-utilization`; the command category, status bar item name, output
+  channel, tooltip heading and quick pick title follow it. The `peakRateClock.*`
+  configuration keys and command ids are deliberately unchanged, but a new
+  extension id means a fresh Secret Storage and global state scope — the API key
+  has to be entered once more and the reading history starts over.
+- Claims now cite their source. The peak-hour rule and the balance response schema
+  were re-checked against DeepSeek's first-party docs and matched exactly, and the
+  README, `src/rates.ts`, `src/deepseek.ts` and the tooltip's rule section link to
+  them.
+
 ## 0.2.0
 
 - Balance polling now paces itself instead of running on a timer.

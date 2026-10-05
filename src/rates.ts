@@ -9,6 +9,12 @@ export interface RateWindow {
 /**
  * Peak pricing windows: 01:00-04:00 and 06:00-10:00 UTC, Monday through Friday,
  * excluding Chinese public holidays. Every other hour is off-peak at half price.
+ *
+ * Quoted from the DeepSeek pricing page (checked 2026-10-04): "Off-peak rates are
+ * half of the peak rates. Peak hours are 01:00 - 04:00 and 06:00 - 10:00 UTC,
+ * Monday through Friday, excluding Chinese public holidays. All other hours are
+ * off-peak, including weekends and Chinese public holidays in full."
+ * https://api-docs.deepseek.com/quick_start/pricing/
  */
 export const PEAK_WINDOWS: readonly RateWindow[] = [
   { startMinute: 60, endMinute: 240 },

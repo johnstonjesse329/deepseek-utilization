@@ -297,7 +297,7 @@ async function main() {
   );
   assert.equal(state.statusBar.command, 'peakRateClock.showSchedule');
   assert.match(state.statusBar.color.id, /^charts\.(green|red)$/);
-  assert.match(state.statusBar.tooltip.value, /Peak Rate Clock/);
+  assert.match(state.statusBar.tooltip.value, /DeepSeek Utilization/);
   assert.match(state.statusBar.tooltip.value, /01:00–04:00 UTC and 06:00–10:00 UTC/);
   assert.match(state.statusBar.tooltip.value, /Not connected\. Add a DeepSeek API key/);
   console.log('status bar         :', state.statusBar.text);

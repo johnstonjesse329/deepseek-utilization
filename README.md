@@ -1,4 +1,4 @@
-# Peak Rate Clock
+# DeepSeek Utilization
 
 A VS Code extension that tells you, at a glance, whether DeepSeek API pricing is
 currently **peak** or **off-peak** — so you can schedule work into the cheap hours —
@@ -17,6 +17,13 @@ Off-peak rates are **half** of peak rates.
 
 Peak only applies **Monday–Friday**, and **never** on a Chinese public holiday.
 Everything else — all weekend hours, all holiday hours — is off-peak at half price.
+
+Quoted from DeepSeek's [Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing/)
+page (checked 2026-10-04), which is the authority for everything in the table above:
+
+> Off-peak rates are half of the peak rates. Peak hours are 01:00 - 04:00 and
+> 06:00 - 10:00 UTC, Monday through Friday, excluding Chinese public holidays. All
+> other hours are off-peak, including weekends and Chinese public holidays in full.
 
 The windows are defined in UTC; the extension converts them into whatever time
 zone you configure (`America/Chicago`, US Central, by default).
@@ -57,11 +64,11 @@ markup actually changed, so your scroll position survives a poll.
 
 | Command | What it does |
 | --- | --- |
-| `Peak Rate Clock: Show Rate Schedule` | Quick pick with upcoming changes, holidays and the rule |
-| `Peak Rate Clock: Show DeepSeek Usage` | Balance, inferred spend and a history chart |
-| `Peak Rate Clock: Refresh DeepSeek Balance` | Poll the balance immediately |
-| `Peak Rate Clock: Set DeepSeek API Key` | Store your key in VS Code Secret Storage |
-| `Peak Rate Clock: Clear DeepSeek API Key` | Remove the stored key |
+| `DeepSeek Utilization: Show Rate Schedule` | Quick pick with upcoming changes, holidays and the rule |
+| `DeepSeek Utilization: Show DeepSeek Usage` | Balance, inferred spend and a history chart |
+| `DeepSeek Utilization: Refresh DeepSeek Balance` | Poll the balance immediately |
+| `DeepSeek Utilization: Set DeepSeek API Key` | Store your key in VS Code Secret Storage |
+| `DeepSeek Utilization: Clear DeepSeek API Key` | Remove the stored key |
 
 ## Settings
 
@@ -82,9 +89,13 @@ markup actually changed, so your scroll position survives a poll.
 
 ## DeepSeek usage tracking
 
-DeepSeek only documents one account endpoint, `GET /user/balance`, which reports
-**remaining credit** — there is no usage or token-consumption API, and the
-[usage dashboard](https://platform.deepseek.com/usage) is web-only.
+DeepSeek documents exactly one account endpoint, `GET /user/balance`, which reports
+**remaining credit**. There is no usage or token-consumption API — the published
+surface is generation, model listing, the Files API and this balance call — so the
+[usage dashboard](https://platform.deepseek.com/usage) is the only place DeepSeek
+itself breaks consumption down, and it is web-only.
+([Get User Balance](https://api-docs.deepseek.com/api/get-user-balance) ·
+[API index](https://api-docs.deepseek.com/api/deepseek-api), checked 2026-10-04.)
 
 So the extension polls the balance every
 `peakRateClock.usage.pollIntervalSeconds` (default 60 seconds, 15 minimum, because
@@ -125,7 +136,7 @@ sampled, never what the totals come to.
   `peakRateClock.usage.backoffWhenUnchanged`.
 
 The tooltip and the usage panel both say when the tracker is backing off or paused,
-and `Peak Rate Clock: Refresh DeepSeek Balance` always reads immediately.
+and `DeepSeek Utilization: Refresh DeepSeek Balance` always reads immediately.
 
 At a 60-second interval a naive history would be ~43,000 entries a month, so
 readings are kept raw for the last 2 hours and then thinned (5-minute buckets for a
@@ -151,6 +162,22 @@ Note that Chinese *make-up workdays* (调休) are ignored by design: the rule sa
 weekend hours are off-peak, so a weekend that China designates as a working day
 stays off-peak here.
 
+## Sources
+
+Everything the extension asserts about DeepSeek traces to DeepSeek's own docs
+(checked 2026-10-04). If a page moves or the rule changes, these are the places to
+re-check:
+
+| Claim | Source |
+| --- | --- |
+| Peak hours 01:00–04:00 and 06:00–10:00 UTC Mon–Fri; off-peak is half price; weekends and holidays off-peak in full | [Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing/) |
+| `GET /user/balance`, and the `is_available` / `balance_infos[]` schema the parser mirrors | [Get User Balance](https://api-docs.deepseek.com/api/get-user-balance) |
+| No usage or token-consumption endpoint exists | [API index](https://api-docs.deepseek.com/api/deepseek-api) and the docs [sitemap](https://api-docs.deepseek.com/sitemap.xml) |
+
+The one third-party input is the holiday *dates*: the pricing doc supplies the rule
+that Chinese public holidays are off-peak, and
+[chinese-days](https://github.com/vsme/chinese-days) supplies which dates those are.
+
 ## Development
 
 ```bash
@@ -158,13 +185,13 @@ npm install
 npm run compile        # tsc -p ./
 npm test               # compiles, then runs node --test
 npm run test:smoke     # activates the compiled extension against a stubbed host
-npm run package        # builds peak-rate-clock-<version>.vsix
+npm run package        # builds deepseek-utilization-<version>.vsix
 ```
 
 Press `F5` to launch an Extension Development Host, or install a build with:
 
 ```bash
-code --install-extension peak-rate-clock-0.2.0.vsix
+code --install-extension deepseek-utilization-0.3.0.vsix
 ```
 
 The rate logic in `src/rates.ts`, the spend maths in `src/usage.ts`, the poll pacing

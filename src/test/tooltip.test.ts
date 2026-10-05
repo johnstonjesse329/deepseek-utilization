@@ -83,7 +83,7 @@ test('tooltip explains the current rate and the rule', () => {
     now,
   );
 
-  assert.match(markdown, /^### Peak Rate Clock/);
+  assert.match(markdown, /^### DeepSeek Utilization/);
   assert.match(markdown, /\*\*Peak right now\*\* — full price\./);
   assert.match(markdown, /\*\*Changes in 1h 45m\*\*/);
   assert.match(markdown, /Peak is 01:00–04:00 UTC and 06:00–10:00 UTC, Mon–Fri/);

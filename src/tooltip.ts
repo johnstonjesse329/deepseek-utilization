@@ -49,7 +49,7 @@ export function tooltipMarkdown(
 ): string {
   const lines: string[] = [];
 
-  lines.push('### Peak Rate Clock');
+  lines.push('### DeepSeek Utilization');
   lines.push('');
   lines.push(
     status.isPeak
@@ -99,7 +99,7 @@ export function tooltipMarkdown(
 
   lines.push('**Rule**');
   lines.push(
-    `Peak is ${peakWindowLabels().join(' and ')}, Mon–Fri, excluding Chinese public holidays. Every other hour — including all weekend hours — is off-peak at ½ price. Times shown in ${timeZone} (today: ${localWindowLabel(timeZone, status.at)}).`,
+    `Peak is ${peakWindowLabels().join(' and ')}, Mon–Fri, excluding Chinese public holidays. Every other hour — including all weekend hours — is off-peak at ½ price. Times shown in ${timeZone} (today: ${localWindowLabel(timeZone, status.at)}). [Source](https://api-docs.deepseek.com/quick_start/pricing/)`,
   );
   lines.push('');
 

@@ -63,7 +63,7 @@ export async function showScheduleQuickPick(context: ScheduleContext): Promise<v
   }
 
   await vscode.window.showQuickPick(items, {
-    title: 'Peak Rate Clock',
+    title: 'DeepSeek Utilization',
     placeHolder: status.isPeak ? 'Peak pricing is active' : 'Off-peak pricing is active',
     matchOnDetail: true,
   });
