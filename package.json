@@ -1,10 +1,15 @@
 {
   "name": "deepseek-utilization",
   "displayName": "DeepSeek Utilization",
-  "description": "See at a glance whether DeepSeek API pricing is peak or off-peak right now, with a DeepSeek balance/usage tracker.",
-  "version": "0.3.0",
+  "description": "Unofficial. See at a glance whether DeepSeek API pricing is peak or off-peak right now, with a DeepSeek balance tracker.",
+  "version": "0.4.0",
   "publisher": "local",
   "license": "MIT",
+  "icon": "images/icon.png",
+  "homepage": "https://github.com/johnstonjesse329/deepseek-utilization#readme",
+  "bugs": {
+    "url": "https://github.com/johnstonjesse329/deepseek-utilization/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/johnstonjesse329/deepseek-utilization.git"
@@ -31,27 +36,27 @@
   "contributes": {
     "commands": [
       {
-        "command": "peakRateClock.showSchedule",
+        "command": "deepseekUtilization.showSchedule",
         "title": "Show Rate Schedule",
         "category": "DeepSeek Utilization"
       },
       {
-        "command": "peakRateClock.showUsage",
+        "command": "deepseekUtilization.showUsage",
         "title": "Show DeepSeek Usage",
         "category": "DeepSeek Utilization"
       },
       {
-        "command": "peakRateClock.refreshUsage",
+        "command": "deepseekUtilization.refreshUsage",
         "title": "Refresh DeepSeek Balance",
         "category": "DeepSeek Utilization"
       },
       {
-        "command": "peakRateClock.setApiKey",
+        "command": "deepseekUtilization.setApiKey",
         "title": "Set DeepSeek API Key",
         "category": "DeepSeek Utilization"
       },
       {
-        "command": "peakRateClock.clearApiKey",
+        "command": "deepseekUtilization.clearApiKey",
         "title": "Clear DeepSeek API Key",
         "category": "DeepSeek Utilization"
       }
@@ -59,12 +64,12 @@
     "configuration": {
       "title": "DeepSeek Utilization",
       "properties": {
-        "peakRateClock.timeZone": {
+        "deepseekUtilization.timeZone": {
           "type": "string",
           "default": "America/Chicago",
           "markdownDescription": "IANA time zone used to display times. Defaults to US Central (`America/Chicago`)."
         },
-        "peakRateClock.statusBarAlignment": {
+        "deepseekUtilization.statusBarAlignment": {
           "type": "string",
           "enum": [
             "left",
@@ -73,12 +78,12 @@
           "default": "right",
           "description": "Which side of the status bar the clock appears on."
         },
-        "peakRateClock.statusBar.label": {
+        "deepseekUtilization.statusBar.label": {
           "type": "string",
           "default": "DeepSeek",
           "markdownDescription": "Identifying prefix shown at the start of the status bar text, so the item reads as something specific rather than a bare countdown. Set to an empty string to drop it."
         },
-        "peakRateClock.extraHolidays": {
+        "deepseekUtilization.extraHolidays": {
           "type": "array",
           "items": {
             "type": "string"
@@ -86,46 +91,46 @@
           "default": [],
           "markdownDescription": "Extra Chinese public holidays (`YYYY-MM-DD`, interpreted in UTC) to treat as off-peak. Useful once the bundled holiday schedule runs out."
         },
-        "peakRateClock.usage.enabled": {
+        "deepseekUtilization.usage.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Poll the DeepSeek balance API and track spend over time. Requires an API key."
         },
-        "peakRateClock.usage.pollIntervalSeconds": {
+        "deepseekUtilization.usage.pollIntervalSeconds": {
           "type": "number",
           "default": 60,
           "minimum": 15,
           "maximum": 3600,
-          "markdownDescription": "How often to poll the DeepSeek balance while readings keep changing, in seconds. Credits can drain quickly across concurrent sessions, so the default is 60 seconds. The interval stretches on its own when nothing is happening — see `peakRateClock.usage.backoffWhenUnchanged`."
+          "markdownDescription": "How often to poll the DeepSeek balance while readings keep changing, in seconds. Credits can drain quickly across concurrent sessions, so the default is 60 seconds. The interval stretches on its own when nothing is happening — see `deepseekUtilization.usage.backoffWhenUnchanged`."
         },
-        "peakRateClock.usage.backoffWhenUnchanged": {
+        "deepseekUtilization.usage.backoffWhenUnchanged": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Stretch the poll interval each time successive readings show the same balance, up to `peakRateClock.usage.maxBackoffSeconds`. An unchanged balance is direct evidence that nothing is being spent, so there is nothing to see. Turn this off to poll on a fixed schedule."
+          "markdownDescription": "Stretch the poll interval each time successive readings show the same balance, up to `deepseekUtilization.usage.maxBackoffSeconds`. An unchanged balance is direct evidence that nothing is being spent, so there is nothing to see. Turn this off to poll on a fixed schedule."
         },
-        "peakRateClock.usage.maxBackoffSeconds": {
+        "deepseekUtilization.usage.maxBackoffSeconds": {
           "type": "number",
           "default": 900,
           "minimum": 60,
           "maximum": 86400,
           "markdownDescription": "Longest interval the unchanged-balance backoff can reach, in seconds. The gaps cost nothing but detail: every reading carries a cumulative spend total, so the spend windows stay exact."
         },
-        "peakRateClock.usage.pauseWhenUnfocused": {
+        "deepseekUtilization.usage.pauseWhenUnfocused": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Stop polling the balance while no VS Code window is focused, so leaving the editor open in the background makes no API calls. The balance is re-read as soon as a window regains focus."
         },
-        "peakRateClock.usage.showBalanceInStatusBar": {
+        "deepseekUtilization.usage.showBalanceInStatusBar": {
           "type": "boolean",
           "default": true,
           "description": "Show the remaining DeepSeek balance directly in the status bar text."
         },
-        "peakRateClock.usage.balanceCurrency": {
+        "deepseekUtilization.usage.balanceCurrency": {
           "type": "string",
           "default": "",
           "markdownDescription": "Currency to show in the status bar when the account reports more than one, e.g. `CNY`. Empty uses the first currency seen."
         },
-        "peakRateClock.usage.baseUrl": {
+        "deepseekUtilization.usage.baseUrl": {
           "type": "string",
           "default": "https://api.deepseek.com",
           "scope": "application",

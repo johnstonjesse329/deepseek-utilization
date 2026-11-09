@@ -14,7 +14,7 @@ import {
   trimSamples,
 } from './usage';
 
-const STORAGE_KEY = 'peakRateClock.usageSamples';
+const STORAGE_KEY = 'deepseekUtilization.usageSamples';
 const MAX_SAMPLES = 20_000;
 const MIN_INTERVAL_MS = 15_000;
 

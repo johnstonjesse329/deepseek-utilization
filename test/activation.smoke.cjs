@@ -248,8 +248,8 @@ const context = {
   extensionUri: { scheme: 'file' },
 };
 
-const STORAGE_KEY = 'peakRateClock.usageSamples';
-const API_KEY_SECRET = 'peakRateClock.deepseekApiKey';
+const STORAGE_KEY = 'deepseekUtilization.usageSamples';
+const API_KEY_SECRET = 'deepseekUtilization.deepseekApiKey';
 
 async function waitFor(predicate, timeoutMs = 4000) {
   const started = Date.now();
@@ -280,10 +280,10 @@ async function main() {
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
-  configValues['peakRateClock.timeZone'] = 'America/Chicago';
-  configValues['peakRateClock.usage.enabled'] = true;
-  configValues['peakRateClock.usage.pollIntervalSeconds'] = 60;
-  configValues['peakRateClock.usage.baseUrl'] = `http://127.0.0.1:${server.address().port}`;
+  configValues['deepseekUtilization.timeZone'] = 'America/Chicago';
+  configValues['deepseekUtilization.usage.enabled'] = true;
+  configValues['deepseekUtilization.usage.pollIntervalSeconds'] = 60;
+  configValues['deepseekUtilization.usage.baseUrl'] = `http://127.0.0.1:${server.address().port}`;
 
   const extension = require(path.join(ROOT, 'out', 'extension.js'));
   await extension.activate(context);
@@ -295,7 +295,7 @@ async function main() {
     /^\$\(circle-filled\) DeepSeek: (?:Off-peak · ½ price|Peak · full price) · /,
     state.statusBar.text,
   );
-  assert.equal(state.statusBar.command, 'peakRateClock.showSchedule');
+  assert.equal(state.statusBar.command, 'deepseekUtilization.showSchedule');
   assert.match(state.statusBar.color.id, /^charts\.(green|red)$/);
   assert.match(state.statusBar.tooltip.value, /DeepSeek Utilization/);
   assert.match(state.statusBar.tooltip.value, /01:00–04:00 UTC and 06:00–10:00 UTC/);
@@ -324,19 +324,19 @@ async function main() {
   );
   console.log('peak / off-peak    :', peakText, '|', offPeakText);
 
-  await state.commands.get('peakRateClock.showSchedule')();
+  await state.commands.get('deepseekUtilization.showSchedule')();
   assert.equal(state.quickPicks.length, 1, 'quick pick was shown');
   const labels = state.quickPicks[0].items.map((item) => item.label).join('\n');
   assert.match(labels, /Peak windows/);
   assert.match(state.quickPicks[0].items[0].label, /Off-peak — ½ price|Peak — full price/);
 
-  await state.commands.get('peakRateClock.refreshUsage')();
+  await state.commands.get('deepseekUtilization.refreshUsage')();
   assert.equal(state.warnings.length, 1, 'warned about the missing key');
   assert.match(state.warnings[0].message, /set a DeepSeek API key/);
   assert.equal(requests.length, 0, 'no API call without a key');
 
   state.inputBoxResult = 'sk-smoke-test-key';
-  await state.commands.get('peakRateClock.setApiKey')();
+  await state.commands.get('deepseekUtilization.setApiKey')();
   assert.equal(secretStore.get(API_KEY_SECRET), 'sk-smoke-test-key');
 
   const polled = await waitFor(() => (globalStore.get(STORAGE_KEY) || []).length > 0);
@@ -361,7 +361,7 @@ async function main() {
   console.log('status bar w/ balance:', state.statusBar.text);
   console.log('stored reading     :', JSON.stringify(samples));
 
-  await state.commands.get('peakRateClock.showUsage')();
+  await state.commands.get('deepseekUtilization.showUsage')();
   assert.equal(state.panels.length, 1, 'usage panel opened');
   const html = state.panels[0].webview.html;
   assert.match(html, /<h1>DeepSeek usage<\/h1>/);
@@ -371,7 +371,7 @@ async function main() {
   assert.equal(html.includes('<script'), false, 'the panel ships no scripts');
   console.log('usage panel bytes  :', html.length);
 
-  await state.commands.get('peakRateClock.refreshUsage')();
+  await state.commands.get('deepseekUtilization.refreshUsage')();
   assert.equal(requests.length >= 2, true, 'manual refresh polled again');
 
   // Pacing: an unchanged balance stretches the interval, and an unfocused window
@@ -396,14 +396,14 @@ async function main() {
   assert.doesNotMatch(state.statusBar.tooltip.value, /Polling is paused/);
   console.log('poll pacing        : backoff while unchanged, paused while unfocused');
 
-  configValues['peakRateClock.extraHolidays'] = ['2027-01-04'];
-  configValues['peakRateClock.timeZone'] = 'UTC';
+  configValues['deepseekUtilization.extraHolidays'] = ['2027-01-04'];
+  configValues['deepseekUtilization.timeZone'] = 'UTC';
   for (const listener of state.configListeners) {
-    listener({ affectsConfiguration: (section) => section.startsWith('peakRateClock') });
+    listener({ affectsConfiguration: (section) => section.startsWith('deepseekUtilization') });
   }
   assert.match(state.statusBar.tooltip.value, /`UTC`/, 'time zone change was picked up');
 
-  await state.commands.get('peakRateClock.clearApiKey')();
+  await state.commands.get('deepseekUtilization.clearApiKey')();
   assert.equal(secretStore.has(API_KEY_SECRET), false);
   assert.match(state.statusBar.tooltip.value, /Not connected/);
   assert.equal(state.infos.length, 1);
@@ -418,7 +418,7 @@ async function main() {
     maxBackoffMs: 900_000,
     backoffWhenUnchanged: true,
     pauseWhenUnfocused: true,
-    baseUrl: configValues['peakRateClock.usage.baseUrl'],
+    baseUrl: configValues['deepseekUtilization.usage.baseUrl'],
     apiKey: 'sk-schedule-probe',
   });
   const scheduled = probe.pollStatus();

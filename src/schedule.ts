@@ -58,7 +58,7 @@ export async function showScheduleQuickPick(context: ScheduleContext): Promise<v
   if (status.scheduleUnknown) {
     items.push({
       label: '$(warning) Holiday data exhausted',
-      detail: `The bundled schedule ends ${HOLIDAY_DATA_THROUGH}. Later dates are assumed to be working days; add exceptions with peakRateClock.extraHolidays.`,
+      detail: `The bundled schedule ends ${HOLIDAY_DATA_THROUGH}. Later dates are assumed to be working days; add exceptions with deepseekUtilization.extraHolidays.`,
     });
   }
 
