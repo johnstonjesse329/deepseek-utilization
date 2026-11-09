@@ -23,7 +23,7 @@ const manifest = JSON.parse(
 };
 
 test('the base URL cannot be redirected by a workspace', () => {
-  const baseUrl = manifest.contributes.configuration.properties['peakRateClock.usage.baseUrl'];
+  const baseUrl = manifest.contributes.configuration.properties['deepseekUtilization.usage.baseUrl'];
   assert.ok(baseUrl, 'the base URL setting still exists');
   assert.equal(
     baseUrl.scope,

@@ -89,7 +89,7 @@ test('tooltip explains the current rate and the rule', () => {
   assert.match(markdown, /Peak is 01:00–04:00 UTC and 06:00–10:00 UTC, Mon–Fri/);
   assert.match(markdown, /today: 7:00 PM–10:00 PM, 12:00 AM–4:00 AM/);
   assert.match(markdown, /Not connected\. Add a DeepSeek API key/);
-  assert.match(markdown, /\[Usage details\]\(command:peakRateClock\.showUsage\)/);
+  assert.match(markdown, /\[Usage details\]\(command:deepseekUtilization\.showUsage\)/);
 });
 
 test('tooltip reports the session spend and the forecast', () => {

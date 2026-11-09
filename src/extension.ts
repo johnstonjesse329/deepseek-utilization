@@ -10,7 +10,7 @@ import { UsagePanelData } from './usageHtml';
 import { UsageTracker } from './usageTracker';
 import { UsagePanel } from './usageView';
 
-const API_KEY_SECRET = 'peakRateClock.deepseekApiKey';
+const API_KEY_SECRET = 'deepseekUtilization.deepseekApiKey';
 /** Never re-render the status bar more often than this. */
 const MAX_REFRESH_MS = 30_000;
 /** ...and never sleep longer than a rate flip can be away. */
@@ -141,7 +141,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   context.subscriptions.push(
     { dispose: () => { if (timer) { clearTimeout(timer); } } },
-    vscode.commands.registerCommand('peakRateClock.showSchedule', () =>
+    vscode.commands.registerCommand('deepseekUtilization.showSchedule', () =>
       showScheduleQuickPick({
         status,
         holidays,
@@ -149,24 +149,24 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         now: Date.now(),
       }),
     ),
-    vscode.commands.registerCommand('peakRateClock.showUsage', () =>
+    vscode.commands.registerCommand('deepseekUtilization.showUsage', () =>
       usagePanel.show(panelData(Date.now())),
     ),
-    vscode.commands.registerCommand('peakRateClock.refreshUsage', async () => {
+    vscode.commands.registerCommand('deepseekUtilization.refreshUsage', async () => {
       if (apiKey === undefined) {
         const choice = await vscode.window.showWarningMessage(
           'DeepSeek Utilization: set a DeepSeek API key before polling your balance.',
           'Set API Key',
         );
         if (choice === 'Set API Key') {
-          await vscode.commands.executeCommand('peakRateClock.setApiKey');
+          await vscode.commands.executeCommand('deepseekUtilization.setApiKey');
         }
         return;
       }
       await usage.refresh({ force: true });
       tick();
     }),
-    vscode.commands.registerCommand('peakRateClock.setApiKey', async () => {
+    vscode.commands.registerCommand('deepseekUtilization.setApiKey', async () => {
       const entered = await vscode.window.showInputBox({
         title: 'DeepSeek API Key',
         prompt: 'Stored in VS Code Secret Storage and only sent to DeepSeek.',
@@ -189,7 +189,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       await usage.refresh({ force: true });
       tick();
     }),
-    vscode.commands.registerCommand('peakRateClock.clearApiKey', async () => {
+    vscode.commands.registerCommand('deepseekUtilization.clearApiKey', async () => {
       await context.secrets.delete(API_KEY_SECRET);
       apiKey = undefined;
       applyUsageSettings();
@@ -200,7 +200,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((event) => {
-      if (!event.affectsConfiguration('peakRateClock')) {
+      if (!event.affectsConfiguration('deepseekUtilization')) {
         return;
       }
       settings = readSettings();
@@ -230,7 +230,7 @@ export function deactivate(): void {
 }
 
 function readSettings(): Settings {
-  const config = vscode.workspace.getConfiguration('peakRateClock');
+  const config = vscode.workspace.getConfiguration('deepseekUtilization');
   const pollSeconds = Math.max(MIN_POLL_SECONDS, config.get<number>('usage.pollIntervalSeconds', 60));
   const maxBackoffSeconds = Math.max(pollSeconds, config.get<number>('usage.maxBackoffSeconds', 900));
   return {

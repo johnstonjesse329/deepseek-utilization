@@ -12,7 +12,7 @@ export class UsagePanel implements vscode.Disposable {
   show(data: UsagePanelData): void {
     if (!this.panel) {
       this.panel = vscode.window.createWebviewPanel(
-        'peakRateClock.usage',
+        'deepseekUtilization.usage',
         'DeepSeek Usage',
         vscode.ViewColumn.Active,
         { enableScripts: false, localResourceRoots: [] },

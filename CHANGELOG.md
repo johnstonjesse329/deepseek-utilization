@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0
+
+- Preparing for a public release: added the MIT `LICENSE`, an unofficial /
+  non-affiliation notice, an icon, CI, `SECURITY.md` and `CONTRIBUTING.md`.
+- **Breaking:** the leftover `peakRateClock.*` configuration keys, command ids and
+  Secret Storage key are now `deepseekUtilization.*`. Settings under the old names
+  are ignored and the API key has to be entered once more.
+
 ## 0.3.0
 
 - Renamed to **DeepSeek Utilization**. The extension id is now

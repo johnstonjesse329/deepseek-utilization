@@ -23,7 +23,7 @@ export class ClockStatusBar implements vscode.Disposable {
       1000,
     );
     item.name = 'DeepSeek Utilization';
-    item.command = 'peakRateClock.showSchedule';
+    item.command = 'deepseekUtilization.showSchedule';
     return item;
   }
 

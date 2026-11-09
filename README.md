@@ -6,6 +6,10 @@ and keeps your remaining credit in the status bar.
 
 Off-peak rates are **half** of peak rates.
 
+> **Unofficial.** This project is not affiliated with, endorsed by, or sponsored by
+> DeepSeek. "DeepSeek" is a trademark of its owner and is used here only to describe
+> what the extension works with.
+
 ## The rule
 
 | Window | Rate |
@@ -26,7 +30,7 @@ page (checked 2026-10-04), which is the authority for everything in the table ab
 > other hours are off-peak, including weekends and Chinese public holidays in full.
 
 The windows are defined in UTC; the extension converts them into whatever time
-zone you configure (`America/Chicago`, US Central, by default).
+zone you configure (`America/Chicago`, US Central, by default; set `deepseekUtilization.timeZone` to your own).
 
 ## Status bar
 
@@ -38,10 +42,10 @@ $(circle-filled) DeepSeek: Off-peak · ½ price · 2h 14m · CNY 110.00     (gre
 $(circle-filled) DeepSeek: Peak · full price · 45m · CNY 108.20         (red)
 ```
 
-The `DeepSeek:` prefix comes from `peakRateClock.statusBar.label`, so the item is
+The `DeepSeek:` prefix comes from `deepseekUtilization.statusBar.label`, so the item is
 identifiable at a glance rather than an anonymous countdown. Set it to an empty
 string to drop it, and hide the balance with
-`peakRateClock.usage.showBalanceInStatusBar`.
+`deepseekUtilization.usage.showBalanceInStatusBar`.
 
 Hover for upcoming rate changes, the next Chinese holidays, the rule restated in
 your local time, and balance / burn-rate / runway detail. Click for the full
@@ -74,18 +78,18 @@ markup actually changed, so your scroll position survives a poll.
 
 | Setting | Default | Description |
 | --- | --- | --- |
-| `peakRateClock.timeZone` | `America/Chicago` | IANA zone used for all displayed times |
-| `peakRateClock.statusBarAlignment` | `right` | Which side of the status bar to use |
-| `peakRateClock.statusBar.label` | `DeepSeek` | Identifying prefix in the bar text |
-| `peakRateClock.extraHolidays` | `[]` | Extra `YYYY-MM-DD` holidays (UTC) to treat as off-peak |
-| `peakRateClock.usage.enabled` | `true` | Poll the DeepSeek balance |
-| `peakRateClock.usage.pollIntervalSeconds` | `60` | How often to poll while readings keep changing (15–3600 s) |
-| `peakRateClock.usage.backoffWhenUnchanged` | `true` | Stretch the interval while the balance does not move |
-| `peakRateClock.usage.maxBackoffSeconds` | `900` | Ceiling for that backoff (60–86400 s) |
-| `peakRateClock.usage.pauseWhenUnfocused` | `true` | Stop polling while no VS Code window is focused |
-| `peakRateClock.usage.showBalanceInStatusBar` | `true` | Show the balance in the bar text |
-| `peakRateClock.usage.balanceCurrency` | `""` | Currency for the bar when several are reported |
-| `peakRateClock.usage.baseUrl` | `https://api.deepseek.com` | API origin (application-scoped: see below) |
+| `deepseekUtilization.timeZone` | `America/Chicago` | IANA zone used for all displayed times |
+| `deepseekUtilization.statusBarAlignment` | `right` | Which side of the status bar to use |
+| `deepseekUtilization.statusBar.label` | `DeepSeek` | Identifying prefix in the bar text |
+| `deepseekUtilization.extraHolidays` | `[]` | Extra `YYYY-MM-DD` holidays (UTC) to treat as off-peak |
+| `deepseekUtilization.usage.enabled` | `true` | Poll the DeepSeek balance |
+| `deepseekUtilization.usage.pollIntervalSeconds` | `60` | How often to poll while readings keep changing (15–3600 s) |
+| `deepseekUtilization.usage.backoffWhenUnchanged` | `true` | Stretch the interval while the balance does not move |
+| `deepseekUtilization.usage.maxBackoffSeconds` | `900` | Ceiling for that backoff (60–86400 s) |
+| `deepseekUtilization.usage.pauseWhenUnfocused` | `true` | Stop polling while no VS Code window is focused |
+| `deepseekUtilization.usage.showBalanceInStatusBar` | `true` | Show the balance in the bar text |
+| `deepseekUtilization.usage.balanceCurrency` | `""` | Currency for the bar when several are reported |
+| `deepseekUtilization.usage.baseUrl` | `https://api.deepseek.com` | API origin (application-scoped: see below) |
 
 ## DeepSeek usage tracking
 
@@ -98,7 +102,7 @@ itself breaks consumption down, and it is web-only.
 [API index](https://api-docs.deepseek.com/api/deepseek-api), checked 2026-10-04.)
 
 So the extension polls the balance every
-`peakRateClock.usage.pollIntervalSeconds` (default 60 seconds, 15 minimum, because
+`deepseekUtilization.usage.pollIntervalSeconds` (default 60 seconds, 15 minimum, because
 credits can drain fast across concurrent sessions), keeps the readings, and derives
 spend from the drops between them.
 
@@ -125,15 +129,15 @@ sampled, never what the totals come to.
 * **Unfocused window** — while no VS Code window has focus no poll is scheduled at
   all, so an editor left open in the background makes no requests. Gaining focus
   reads the balance immediately, so the first thing you see is current. Turn this
-  off with `peakRateClock.usage.pauseWhenUnfocused`. The trade-off is that spending
+  off with `deepseekUtilization.usage.pauseWhenUnfocused`. The trade-off is that spending
   which happens while nothing is focused shows up as a single balance drop on the
   next reading: the total stays exact, only its timing gets coarse.
 * **Unchanged balance** — each reading that shows the same balance doubles the
-  interval, up to `peakRateClock.usage.maxBackoffSeconds` (default 15 minutes),
+  interval, up to `deepseekUtilization.usage.maxBackoffSeconds` (default 15 minutes),
   because an unchanged balance means nothing is being spent. Any change — including
   a top-up — snaps the interval back to the configured one, and a failed poll counts
   as no news so a flaky endpoint is retried gently too. Turn this off with
-  `peakRateClock.usage.backoffWhenUnchanged`.
+  `deepseekUtilization.usage.backoffWhenUnchanged`.
 
 The tooltip and the usage panel both say when the tracker is backing off or paused,
 and `DeepSeek Utilization: Refresh DeepSeek Balance` always reads immediately.
@@ -151,7 +155,7 @@ the rate to lag the last reading rather than the current instant.
 The API key lives in VS Code Secret Storage, never in `settings.json`, and is only
 sent to the DeepSeek API origin you configure.
 
-`peakRateClock.usage.baseUrl` is deliberately **application-scoped**, so only your
+`deepseekUtilization.usage.baseUrl` is deliberately **application-scoped**, so only your
 user settings can set it. An ordinary setting could otherwise be overridden by a
 `.vscode/settings.json` in any repository you open, which would hand the key your
 extension already holds to whichever host that file named. User scope keeps that
@@ -163,7 +167,7 @@ means entering the key again.)
 Holiday dates come from [chinese-days](https://github.com/vsme/chinese-days), which
 ships the State Council arrangements for **2004 through 2026**. Once the clock runs
 past that, the extension assumes ordinary working days and says so in the tooltip.
-Add dates to `peakRateClock.extraHolidays` to cover the gap.
+Add dates to `deepseekUtilization.extraHolidays` to cover the gap.
 
 Note that Chinese *make-up workdays* (调休) are ignored by design: the rule says all
 weekend hours are off-peak, so a weekend that China designates as a working day
@@ -185,6 +189,14 @@ The one third-party input is the holiday *dates*: the pricing doc supplies the r
 that Chinese public holidays are off-peak, and
 [chinese-days](https://github.com/vsme/chinese-days) supplies which dates those are.
 
+## Install
+
+Download the `.vsix` from the [latest release](https://github.com/johnstonjesse329/deepseek-utilization/releases/latest) and run:
+
+```bash
+code --install-extension deepseek-utilization-<version>.vsix
+```
+
 ## Development
 
 ```bash
@@ -198,7 +210,7 @@ npm run package        # builds deepseek-utilization-<version>.vsix
 Press `F5` to launch an Extension Development Host, or install a build with:
 
 ```bash
-code --install-extension deepseek-utilization-0.3.0.vsix
+code --install-extension deepseek-utilization-0.4.0.vsix
 ```
 
 The rate logic in `src/rates.ts`, the spend maths in `src/usage.ts`, the poll pacing

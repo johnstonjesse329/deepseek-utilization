@@ -83,7 +83,7 @@ export function tooltipMarkdown(
 
   if (status.scheduleUnknown) {
     lines.push(
-      `⚠️ The bundled Chinese holiday schedule ends ${HOLIDAY_DATA_THROUGH}; later dates are assumed to be working days. Add exceptions with \`peakRateClock.extraHolidays\`.`,
+      `⚠️ The bundled Chinese holiday schedule ends ${HOLIDAY_DATA_THROUGH}; later dates are assumed to be working days. Add exceptions with \`deepseekUtilization.extraHolidays\`.`,
     );
     lines.push('');
   }
@@ -107,7 +107,7 @@ export function tooltipMarkdown(
   lines.push(...usageLines(usage, now));
   lines.push('');
   lines.push(
-    '[Set API key](command:peakRateClock.setApiKey) · [Usage details](command:peakRateClock.showUsage) · [Refresh now](command:peakRateClock.refreshUsage)',
+    '[Set API key](command:deepseekUtilization.setApiKey) · [Usage details](command:deepseekUtilization.showUsage) · [Refresh now](command:deepseekUtilization.refreshUsage)',
   );
 
   return lines.join('\n');
